@@ -27,9 +27,9 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${baseClasses} ${variants[variant]} ${className} ${
-        disabled || isLoading ? "cursor-not-allowed" : ""
-      }`}
+      className={`cursor-pointer ${baseClasses} ${
+        variants[variant]
+      } ${className} ${disabled || isLoading ? "cursor-not-allowed" : ""}`}
       disabled={disabled || isLoading}
       {...props}
     >
