@@ -64,7 +64,10 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-emerald-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div
+          className="text-center mb-8 animate-fadeIn"
+          style={{ animationDelay: "0.2s" }}
+        >
           <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
             <svg
               className="w-8 h-8 text-white"
@@ -86,41 +89,47 @@ const LoginPage: React.FC = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Input
-            label="Email / Phone Number"
-            type="text"
-            name="identifier"
-            value={formData.identifier}
-            onChange={handleInputChange}
-            error={errors.identifier}
-            placeholder="user@clinic.com/+628123456789"
-          >
-            <User2 className="text-gray-400" />
-          </Input>
+          <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
+            <Input
+              label="Email / Phone Number"
+              type="text"
+              name="identifier"
+              value={formData.identifier}
+              onChange={handleInputChange}
+              error={errors.identifier}
+              placeholder="user@clinic.com/+628123456789"
+            >
+              <User2 className="text-gray-400" />
+            </Input>
+          </div>
 
-          <Input
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            error={errors.password}
-            placeholder="Enter your password"
+          <div className="animate-fadeIn" style={{ animationDelay: "0.4s" }}>
+            <Input
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              error={errors.password}
+              placeholder="Enter your password"
+            >
+              {showPassword ? (
+                <EyeOff
+                  className="text-gray-400"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <Eye
+                  className="text-gray-400"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+            </Input>
+          </div>
+          <div
+            className="flex items-center justify-between animate-fadeIn"
+            style={{ animationDelay: "0.5s" }}
           >
-            {showPassword ? (
-              <EyeOff
-                className="text-gray-400"
-                onClick={() => setShowPassword(false)}
-              />
-            ) : (
-              <Eye
-                className="text-gray-400"
-                onClick={() => setShowPassword(true)}
-              />
-            )}
-          </Input>
-
-          <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -136,7 +145,7 @@ const LoginPage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="animate-fadeIn" style={{ animationDelay: "0.5s" }}>
+          <div className="animate-fadeIn" style={{ animationDelay: "0.6s" }}>
             <Button type="submit" isLoading={isLoading}>
               Sign In
             </Button>
@@ -144,11 +153,14 @@ const LoginPage: React.FC = () => {
         </form>
 
         {/* Footer */}
-        <div className="mt-8 text-center">
+        <div
+          className="mt-8 text-center animate-fadeIn"
+          style={{ animationDelay: "0.7s" }}
+        >
           <p className="text-gray-600">
             Don&apos;t have an account?{" "}
             <Link
-              href="/auth/register"
+              href="/register"
               className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
             >
               Sign up here
