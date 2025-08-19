@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { User2 } from "lucide-react";
+import { Eye, EyeOff, Lock, User2 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { isErrorResponse } from "@/utils/error-response";
@@ -8,12 +8,15 @@ import axiosInstance from "@/lib/axiosInstance";
 import { showSuccess } from "@/lib/sonner";
 import { useRouter } from "next/navigation";
 
-const ForgotPWPage: React.FC = () => {
+const ResetPWPage: React.FC = () => {
   const [formData, setFormData] = useState({
     identifier: "",
+    newPassword: "",
+    otp: 0,
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +41,8 @@ const ForgotPWPage: React.FC = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.identifier)
       newErrors.identifier = "Email or phone is required";
+    if (!formData.newPassword) newErrors.newPassword = "Password is required";
+    if (!formData.otp) newErrors.otp = "OTP is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -46,12 +51,14 @@ const ForgotPWPage: React.FC = () => {
     }
 
     try {
-      const res = await axiosInstance.post("/v1/auth/forgot-otp", formData);
+      const res = await axiosInstance.patch("/v1/auth/reset", formData);
       showSuccess(res.data.message);
-      router.push("/reset");
+      router.push("/login");
     } catch (error) {
       setIsLoading(false);
-      isErrorResponse(error, "Send OTP failed");
+      console.log(error);
+
+      isErrorResponse(error, "Reset Password failed");
     } finally {
       setIsLoading(false);
     }
@@ -75,14 +82,12 @@ const ForgotPWPage: React.FC = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
             />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Forgot Password</h1>
-        <p className="text-gray-500 mt-1">
-          We will send you a otp to reset your password
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+        <p className="text-gray-600 mt-1">Sign in to your clinic account</p>
       </div>
 
       {/* Form */}
@@ -102,8 +107,44 @@ const ForgotPWPage: React.FC = () => {
         </div>
 
         <div className="animate-fadeIn" style={{ animationDelay: "0.4s" }}>
+          <Input
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            name="newPassword"
+            value={formData.newPassword}
+            onChange={handleInputChange}
+            error={errors.newPassword}
+            placeholder="Enter your new password"
+          >
+            {showPassword ? (
+              <EyeOff
+                className="text-gray-400"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <Eye
+                className="text-gray-400"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
+          </Input>
+        </div>
+        <div className="animate-fadeIn" style={{ animationDelay: "0.5s" }}>
+          <Input
+            label="OTP"
+            type="number"
+            name="otp"
+            value={formData.otp}
+            onChange={handleInputChange}
+            error={errors.otp}
+            placeholder="Enter your OTP"
+          >
+            <Lock className="text-gray-400" />
+          </Input>
+        </div>
+        <div className="animate-fadeIn" style={{ animationDelay: "0.6s" }}>
           <Button type="submit" isLoading={isLoading}>
-            Submit
+            Reset Password
           </Button>
         </div>
       </form>
@@ -111,4 +152,4 @@ const ForgotPWPage: React.FC = () => {
   );
 };
 
-export default ForgotPWPage;
+export default ResetPWPage;
