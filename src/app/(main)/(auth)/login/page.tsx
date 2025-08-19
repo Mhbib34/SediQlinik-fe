@@ -61,112 +61,110 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-emerald-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-        {/* Header */}
-        <div
-          className="text-center mb-8 animate-fadeIn"
-          style={{ animationDelay: "0.2s" }}
-        >
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-            <svg
-              className="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-600 mt-1">Sign in to your clinic account</p>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
-            <Input
-              label="Email / Phone Number"
-              type="text"
-              name="identifier"
-              value={formData.identifier}
-              onChange={handleInputChange}
-              error={errors.identifier}
-              placeholder="user@clinic.com/+628123456789"
-            >
-              <User2 className="text-gray-400" />
-            </Input>
-          </div>
-
-          <div className="animate-fadeIn" style={{ animationDelay: "0.4s" }}>
-            <Input
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              error={errors.password}
-              placeholder="Enter your password"
-            >
-              {showPassword ? (
-                <EyeOff
-                  className="text-gray-400"
-                  onClick={() => setShowPassword(false)}
-                />
-              ) : (
-                <Eye
-                  className="text-gray-400"
-                  onClick={() => setShowPassword(true)}
-                />
-              )}
-            </Input>
-          </div>
-          <div
-            className="flex items-center justify-between animate-fadeIn"
-            style={{ animationDelay: "0.5s" }}
+    <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+      {/* Header */}
+      <div
+        className="text-center mb-8 animate-fadeIn"
+        style={{ animationDelay: "0.2s" }}
+      >
+        <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="ml-2 text-sm text-gray-600">Remember me</span>
-            </label>
-            <Link
-              href="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              Forgot password?
-            </Link>
-          </div>
-
-          <div className="animate-fadeIn" style={{ animationDelay: "0.6s" }}>
-            <Button type="submit" isLoading={isLoading}>
-              Sign In
-            </Button>
-          </div>
-        </form>
-
-        {/* Footer */}
-        <div
-          className="mt-8 text-center animate-fadeIn"
-          style={{ animationDelay: "0.7s" }}
-        >
-          <p className="text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-            >
-              Sign up here
-            </Link>
-          </p>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
         </div>
+        <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+        <p className="text-gray-600 mt-1">Sign in to your clinic account</p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
+          <Input
+            label="Email / Phone Number"
+            type="text"
+            name="identifier"
+            value={formData.identifier}
+            onChange={handleInputChange}
+            error={errors.identifier}
+            placeholder="user@clinic.com/+628123456789"
+          >
+            <User2 className="text-gray-400" />
+          </Input>
+        </div>
+
+        <div className="animate-fadeIn" style={{ animationDelay: "0.4s" }}>
+          <Input
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            error={errors.password}
+            placeholder="Enter your password"
+          >
+            {showPassword ? (
+              <EyeOff
+                className="text-gray-400"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <Eye
+                className="text-gray-400"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
+          </Input>
+        </div>
+        <div
+          className="flex items-center justify-between animate-fadeIn"
+          style={{ animationDelay: "0.5s" }}
+        >
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="ml-2 text-sm text-gray-600">Remember me</span>
+          </label>
+          <Link
+            href="/forgot-password"
+            className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
+        <div className="animate-fadeIn" style={{ animationDelay: "0.6s" }}>
+          <Button type="submit" isLoading={isLoading}>
+            Sign In
+          </Button>
+        </div>
+      </form>
+
+      {/* Footer */}
+      <div
+        className="mt-8 text-center animate-fadeIn"
+        style={{ animationDelay: "0.7s" }}
+      >
+        <p className="text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          >
+            Sign up here
+          </Link>
+        </p>
       </div>
     </div>
   );
