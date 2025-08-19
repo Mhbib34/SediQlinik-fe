@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
-import { Eye, EyeOff, User2 } from "lucide-react";
+import { User2 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { isErrorResponse } from "@/utils/error-response";
@@ -12,11 +11,9 @@ import { useRouter } from "next/navigation";
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
     identifier: "",
-    password: "",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +38,6 @@ const LoginPage: React.FC = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.identifier)
       newErrors.identifier = "Email or phone is required";
-    if (!formData.password) newErrors.password = "Password is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -50,11 +46,11 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      const res = await axiosInstance.post("/v1/auth/login", formData);
+      const res = await axiosInstance.post("/v1/auth/forgot-otp", formData);
       showSuccess(res.data.message);
     } catch (error) {
       setIsLoading(false);
-      isErrorResponse(error, "Login failed");
+      isErrorResponse(error, "Send OTP failed");
     } finally {
       setIsLoading(false);
     }
@@ -79,12 +75,14 @@ const LoginPage: React.FC = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-600 mt-1">Sign in to your clinic account</p>
+          <h1 className="text-2xl font-bold text-gray-900">Forgot Password</h1>
+          <p className="text-gray-500 mt-1">
+            We will send you a otp to reset your password
+          </p>
         </div>
 
         {/* Form */}
@@ -104,69 +102,11 @@ const LoginPage: React.FC = () => {
           </div>
 
           <div className="animate-fadeIn" style={{ animationDelay: "0.4s" }}>
-            <Input
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              error={errors.password}
-              placeholder="Enter your password"
-            >
-              {showPassword ? (
-                <EyeOff
-                  className="text-gray-400"
-                  onClick={() => setShowPassword(false)}
-                />
-              ) : (
-                <Eye
-                  className="text-gray-400"
-                  onClick={() => setShowPassword(true)}
-                />
-              )}
-            </Input>
-          </div>
-          <div
-            className="flex items-center justify-between animate-fadeIn"
-            style={{ animationDelay: "0.5s" }}
-          >
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="ml-2 text-sm text-gray-600">Remember me</span>
-            </label>
-            <Link
-              href="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              Forgot password?
-            </Link>
-          </div>
-
-          <div className="animate-fadeIn" style={{ animationDelay: "0.6s" }}>
             <Button type="submit" isLoading={isLoading}>
-              Sign In
+              Submit
             </Button>
           </div>
         </form>
-
-        {/* Footer */}
-        <div
-          className="mt-8 text-center animate-fadeIn"
-          style={{ animationDelay: "0.7s" }}
-        >
-          <p className="text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-            >
-              Sign up here
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );
