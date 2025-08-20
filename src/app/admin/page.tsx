@@ -1,10 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Calendar,
   Users,
   Clock,
-  Activity,
   Settings,
   Plus,
   Eye,
@@ -19,19 +17,13 @@ import {
   Upload,
   Check,
   AlertCircle,
-  Home,
   Building2,
   Shield,
-  Menu,
-  PanelsTopLeft,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
 import { useShallow } from "zustand/shallow";
 import { isErrorResponse } from "@/utils/error-response";
-import { useRouter } from "next/navigation";
 import PageLoader from "@/components/fragment/PageLoader";
-import Notification from "./components/Notification";
-import Profile from "./components/Profile";
 import axiosInstance from "@/lib/axiosInstance";
 import { useDoctorStore } from "@/store/doctor-store";
 import { useAppointmentStore } from "@/store/appointment-store";
@@ -40,6 +32,7 @@ import AppointmentTab from "./components/AppointmentTab";
 import Dashboard, { Queue } from "./components/Dashboard";
 import Header from "./components/Header";
 import AppointmentTable from "./components/AppointmentTable";
+import Pagination from "@/components/fragment/Paginations";
 
 interface Patient {
   id: string;
@@ -70,9 +63,14 @@ const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterDoctor, setFilterDoctor] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [todayAppointments, setTodayAppointments] = useState<
     AppointmentPage | undefined
   >(undefined);
+
   const [appointments, setAppointments] = useState<AppointmentPage | undefined>(
     undefined
   );
@@ -128,18 +126,18 @@ const AdminDashboard: React.FC = () => {
       fetchStats();
       fetchDoctorPage(1);
       (async () => {
-        const all = await fetchAppointmentPage(1);
-        setAppointments(all);
         const today = await fetchAppointmentPage(1, {
           appointment_date: new Date().toISOString().split("T")[0],
         });
         setTodayAppointments(today);
+        const all = await fetchAppointmentPage(currentPage);
+        setAppointments(all);
       })();
     } catch (error) {
       isErrorResponse(error, "Logout failed. Please try again.");
     }
     //eslint-disable-next-line
-  }, []);
+  }, [currentPage]);
 
   const [patients] = useState<Patient[]>([
     {
@@ -277,7 +275,7 @@ const AdminDashboard: React.FC = () => {
       available: "Tersedia",
       busy: "Sibuk",
       off: "Libur",
-      pending: "Menunggu",
+      pending: "Terjadwal",
       wating: "Menunggu",
       confirmed: "Dikonfirmasi",
     };
@@ -293,9 +291,19 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  console.log(todayAppointments);
+  const filteredAppointments = appointments?.data.filter((appointment) => {
+    const statusMatch =
+      filterStatus === "all" || appointment.status === filterStatus;
+
+    const doctorMatch =
+      filterDoctor === "all" || appointment.doctor.name === filterDoctor;
+
+    return statusMatch && doctorMatch;
+  });
 
   if (loading) return <PageLoader />;
+  console.log(appointments);
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Navbar */}
@@ -327,9 +335,19 @@ const AdminDashboard: React.FC = () => {
         {activeTab === "appointments" && (
           <AppointmentTab
             doctors={doctorPage.data}
-            todayAppointments={appointments!}
+            todayAppointments={filteredAppointments!}
             getStatusBadge={getStatusBadge}
-          />
+            filterStatus={filterStatus!}
+            setFilterStatus={setFilterStatus}
+            filterDoctor={filterDoctor!}
+            setFilterDoctor={setFilterDoctor}
+          >
+            <Pagination
+              currentPage={appointments?.paging.current_page ?? 1}
+              totalPages={appointments?.paging.total_pages ?? 1}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </AppointmentTab>
         )}
 
         {activeTab === "patients" && (

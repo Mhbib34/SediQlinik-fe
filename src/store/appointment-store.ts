@@ -17,7 +17,7 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
     data: [],
     paging: {
       size: 0,
-      total_page: 0,
+      total_pages: 0,
       current_page: 0,
     },
   },
@@ -33,7 +33,7 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
         page: number;
         size: number;
         appointment_date?: string;
-      } = { page, size: 10 };
+      } = { page, size: 5 };
 
       if (keyword?.appointment_date)
         params.appointment_date = keyword.appointment_date;
@@ -51,7 +51,7 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
       set({
         appointmentPage: {
           data: [],
-          paging: { size: 0, total_page: 0, current_page: 0 },
+          paging: { size: 0, total_pages: 0, current_page: 0 },
         },
         loading: false,
       });

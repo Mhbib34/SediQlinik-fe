@@ -30,7 +30,7 @@ export type AppointmentPage = {
   data: Appointment[];
   paging: {
     size: number;
-    total_page: number;
+    total_pages: number;
     current_page: number;
   };
 };
