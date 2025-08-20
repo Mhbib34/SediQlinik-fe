@@ -8,6 +8,7 @@ import { isErrorResponse } from "@/utils/error-response";
 import axiosInstance from "@/lib/axiosInstance";
 import { showSuccess } from "@/lib/sonner";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth-store";
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const fetchUser = useAuthStore((state) => state.fetchUser);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,6 +54,16 @@ const LoginPage: React.FC = () => {
     try {
       const res = await axiosInstance.post("/v1/auth/login", formData);
       showSuccess(res.data.message);
+      if (res.data.data.role === "admin") {
+        router.push("/admin");
+      }
+      if (res.data.data.role === "doctor") {
+        router.push("/doctor");
+      }
+      if (res.data.data.role === "patient") {
+        router.push("/");
+      }
+      fetchUser();
     } catch (error) {
       setIsLoading(false);
       isErrorResponse(error, "Login failed");
