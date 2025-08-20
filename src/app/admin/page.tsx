@@ -7,14 +7,12 @@ import {
   Plus,
   Eye,
   Edit,
-  Trash2,
   DollarSign,
   BarChart3,
   UserCheck,
   Stethoscope,
   Phone,
   Mail,
-  Upload,
   Check,
   AlertCircle,
   Building2,
@@ -33,19 +31,7 @@ import Dashboard, { Queue } from "./components/Dashboard";
 import Header from "./components/Header";
 import AppointmentTable from "./components/AppointmentTable";
 import Pagination from "@/components/fragment/Paginations";
-
-interface Patient {
-  id: string;
-  name: string;
-  phone: string;
-  email: string;
-  age: number;
-  gender: string;
-  address: string;
-  lastVisit: string;
-  totalVisits: number;
-  status: "active" | "inactive";
-}
+import PatientTab from "./components/PatientTab";
 
 interface Doctor {
   id: string;
@@ -138,69 +124,6 @@ const AdminDashboard: React.FC = () => {
     }
     //eslint-disable-next-line
   }, [currentPage]);
-
-  const [patients] = useState<Patient[]>([
-    {
-      id: "P001",
-      name: "Budi Santoso",
-      phone: "081234567890",
-      email: "budi@email.com",
-      age: 35,
-      gender: "Laki-laki",
-      address: "Jl. Merdeka No. 123, Medan",
-      lastVisit: "2025-08-15",
-      totalVisits: 5,
-      status: "active",
-    },
-    {
-      id: "P002",
-      name: "Siti Aminah",
-      phone: "081234567891",
-      email: "siti@email.com",
-      age: 28,
-      gender: "Perempuan",
-      address: "Jl. Sudirman No. 456, Medan",
-      lastVisit: "2025-08-18",
-      totalVisits: 12,
-      status: "active",
-    },
-    {
-      id: "P003",
-      name: "Andi Wijaya",
-      phone: "081234567892",
-      email: "andi@email.com",
-      age: 42,
-      gender: "Laki-laki",
-      address: "Jl. Ahmad Yani No. 789, Medan",
-      lastVisit: "2025-08-10",
-      totalVisits: 8,
-      status: "active",
-    },
-    {
-      id: "P004",
-      name: "Maya Sari",
-      phone: "081234567893",
-      email: "maya@email.com",
-      age: 31,
-      gender: "Perempuan",
-      address: "Jl. Gatot Subroto No. 321, Medan",
-      lastVisit: "2025-08-18",
-      totalVisits: 3,
-      status: "active",
-    },
-    {
-      id: "P005",
-      name: "Rizki Pratama",
-      phone: "081234567894",
-      email: "rizki@email.com",
-      age: 25,
-      gender: "Laki-laki",
-      address: "Jl. Diponegoro No. 654, Medan",
-      lastVisit: "2025-07-30",
-      totalVisits: 2,
-      status: "inactive",
-    },
-  ]);
 
   const [doctors] = useState<Doctor[]>([
     {
@@ -350,137 +273,7 @@ const AdminDashboard: React.FC = () => {
           </AppointmentTab>
         )}
 
-        {activeTab === "patients" && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-              <div>
-                <h2 className="text-3xl font-bold text-slate-800">
-                  Data Pasien
-                </h2>
-                <p className="text-slate-600 mt-1">
-                  Kelola informasi pasien klinik
-                </p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <button className="flex items-center space-x-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
-                  <Upload className="w-4 h-4" />
-                  <span>Import Pasien</span>
-                </button>
-                <button className="flex items-center space-x-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
-                  <Plus className="w-4 h-4" />
-                  <span>Tambah Pasien</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Patients Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-              <div className="p-6">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="text-left border-b border-slate-200">
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          ID
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Nama Lengkap
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Kontak
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Usia
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Gender
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Kunjungan Terakhir
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Total Kunjungan
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Status
-                        </th>
-                        <th className="pb-3 text-sm font-medium text-slate-600">
-                          Aksi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {patients.map((patient) => (
-                        <tr
-                          key={patient.id}
-                          className="border-b border-slate-100 hover:bg-slate-50 transition-colors"
-                        >
-                          <td className="py-4 text-sm text-slate-600">
-                            {patient.id}
-                          </td>
-                          <td className="py-4">
-                            <div>
-                              <p className="text-sm font-medium text-slate-800">
-                                {patient.name}
-                              </p>
-                              <p className="text-xs text-slate-500">
-                                {patient.address}
-                              </p>
-                            </div>
-                          </td>
-                          <td className="py-4">
-                            <div className="space-y-1">
-                              <div className="flex items-center space-x-2">
-                                <Phone className="w-3 h-3 text-slate-400" />
-                                <span className="text-xs text-slate-600">
-                                  {patient.phone}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <Mail className="w-3 h-3 text-slate-400" />
-                                <span className="text-xs text-slate-600">
-                                  {patient.email}
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="py-4 text-sm text-slate-600">
-                            {patient.age} tahun
-                          </td>
-                          <td className="py-4 text-sm text-slate-600">
-                            {patient.gender}
-                          </td>
-                          <td className="py-4 text-sm text-slate-600">
-                            {patient.lastVisit}
-                          </td>
-                          <td className="py-4 text-sm text-slate-600">
-                            {patient.totalVisits}x
-                          </td>
-                          <td className="py-4">
-                            {getStatusBadge(patient.status)}
-                          </td>
-                          <td className="py-4">
-                            <div className="flex items-center space-x-1">
-                              <button className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
-                                <Eye className="w-4 h-4" />
-                              </button>
-                              <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                                <Edit className="w-4 h-4" />
-                              </button>
-                              <button className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === "patients" && <PatientTab />}
 
         {activeTab === "doctors" && (
           <div className="space-y-6">

@@ -24,3 +24,12 @@ export type User = {
   reset_otp?: string;
   reset_otp_expired_at?: Date;
 };
+
+export type UserPage = {
+  data: User[];
+  paging: {
+    size: number;
+    total_pages: number;
+    current_page: number;
+  };
+};

@@ -6,7 +6,7 @@ import Button from "@/components/ui/Button";
 import { isErrorResponse } from "@/utils/error-response";
 import axiosInstance from "@/lib/axiosInstance";
 import { showSuccess } from "@/lib/sonner";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail, MapPin, Phone, User2 } from "lucide-react";
 
 const RegisterPage: React.FC = () => {
@@ -23,6 +23,7 @@ const RegisterPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const pathName = usePathname();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -65,7 +66,9 @@ const RegisterPage: React.FC = () => {
 
       const res = await axiosInstance.post("/v1/auth/register", formData);
       showSuccess(res.data.message);
-      router.push("/login");
+      if (!pathName.startsWith("/admin")) {
+        router.push("/login");
+      }
     } catch (error) {
       console.log(error);
       isErrorResponse(error, "Registration failed");
