@@ -1,29 +1,29 @@
-import { AppointmentPage } from "@/types/appointment";
+import { Appointment } from "@/types/appointment";
 import { Doctor } from "@/types/doctor";
 import { Format } from "@/utils/format";
-import {
-  Download,
-  Edit,
-  Eye,
-  Filter,
-  Phone,
-  Plus,
-  RefreshCw,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { Edit, Eye, Filter, Phone, Trash2 } from "lucide-react";
 import React from "react";
 
 type Props = {
   doctors: Doctor[];
-  todayAppointments: AppointmentPage;
+  todayAppointments: Appointment[];
   getStatusBadge: (status: string) => React.ReactNode;
+  filterStatus: string;
+  setFilterStatus: React.Dispatch<React.SetStateAction<string>>;
+  filterDoctor: string;
+  setFilterDoctor: React.Dispatch<React.SetStateAction<string>>;
+  children?: React.ReactNode;
 };
 
 const AppointmentTab = ({
   doctors,
   todayAppointments,
   getStatusBadge,
+  filterStatus,
+  setFilterStatus,
+  filterDoctor,
+  setFilterDoctor,
+  children,
 }: Props) => {
   return (
     <div className="space-y-6">
@@ -34,20 +34,6 @@ const AppointmentTab = ({
           </h2>
           <p className="text-slate-600 mt-1">Kelola semua appointment pasien</p>
         </div>
-        <div className="flex items-center space-x-3">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
-            <Upload className="w-4 h-4" />
-            <span>Import</span>
-          </button>
-          <button className="flex items-center space-x-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
-            <Download className="w-4 h-4" />
-            <span>Export</span>
-          </button>
-          <button className="flex items-center space-x-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
-            <Plus className="w-4 h-4" />
-            <span>Buat Appointment</span>
-          </button>
-        </div>
       </div>
 
       {/* Filter Bar */}
@@ -57,27 +43,29 @@ const AppointmentTab = ({
             <Filter className="w-4 h-4 text-slate-500" />
             <span className="text-sm font-medium text-slate-700">Filter:</span>
           </div>
-          <select className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option>Semua Status</option>
-            <option>Terjadwal</option>
-            <option>Berlangsung</option>
-            <option>Selesai</option>
-            <option>Dibatalkan</option>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="all">Semua Status</option>
+            <option value="pending">Terjadwal</option>
+            <option value="confirmed">Dikonfirmasi</option>
+            <option value="completed">Selesai</option>
+            <option value="cancelled">Dibatalkan</option>
           </select>
-          <select className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option>Semua Dokter</option>
+          <select
+            value={filterDoctor}
+            onChange={(e) => setFilterDoctor(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="all">Semua Dokter</option>
             {doctors.map((doctor) => (
-              <option key={doctor.id}>{doctor.name}</option>
+              <option key={doctor.id} value={doctor.name}>
+                {doctor.name}
+              </option>
             ))}
           </select>
-          <input
-            type="date"
-            className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-          <button className="flex items-center space-x-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
-            <RefreshCw className="w-4 h-4" />
-            <span>Refresh</span>
-          </button>
         </div>
       </div>
 
@@ -115,7 +103,7 @@ const AppointmentTab = ({
                 </tr>
               </thead>
               <tbody>
-                {todayAppointments?.data.map((appointment) => (
+                {todayAppointments?.map((appointment) => (
                   <tr
                     key={appointment.id}
                     className="border-b border-slate-100 hover:bg-slate-50 transition-colors"
@@ -170,6 +158,7 @@ const AppointmentTab = ({
           </div>
         </div>
       </div>
+      {children}
     </div>
   );
 };
