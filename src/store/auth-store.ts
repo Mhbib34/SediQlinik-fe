@@ -49,6 +49,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       });
       set({ users: res.data, loading: false });
 
+      return res.data;
       //eslint-disable-next-line
     } catch (error) {
       set({

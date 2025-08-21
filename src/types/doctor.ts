@@ -3,13 +3,18 @@ export type Doctor = {
   user_id: string;
   specialization: string;
   is_active: boolean;
-  name?: string;
   status?: string;
   photos?: string;
+  day_of_week?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  schedule_id?: string;
+  start_time?: string;
+  end_time?: string;
   created_at?: Date;
   updated_at?: Date;
 };
-
 export type DoctorPage = {
   data: Doctor[];
   paging: {

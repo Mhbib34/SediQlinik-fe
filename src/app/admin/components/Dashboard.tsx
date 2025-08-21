@@ -136,9 +136,7 @@ const Dashboard = ({
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <h3 className="text-lg font-semibold text-slate-800 mb-4">
-            Dokter Hari Ini
-          </h3>
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">Dokter</h3>
           <div className="space-y-3">
             {doctorPage.data.slice(0, 5).map((doctor) => (
               <div

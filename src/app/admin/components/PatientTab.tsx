@@ -2,6 +2,7 @@
 import RegisterPage from "@/app/(main)/(auth)/register/page";
 import PageLoader from "@/components/fragment/PageLoader";
 import Pagination from "@/components/fragment/Paginations";
+import { showSuccess } from "@/lib/sonner";
 import { useAuthStore } from "@/store/auth-store";
 import { Format } from "@/utils/format";
 import { Mail, Phone, Plus, RefreshCcw, X } from "lucide-react";
@@ -23,6 +24,11 @@ const PatientTab = () => {
     fetchUsers(currentPage);
     //eslint-disable-next-line
   }, [currentPage]);
+
+  const refreshPatient = () => {
+    fetchUsers(currentPage);
+    showSuccess("Data berhasil di refresh");
+  };
 
   const gender = (gender: string) => {
     return gender === "male" ? "Laki-laki" : "Perempuan";
@@ -71,7 +77,7 @@ const PatientTab = () => {
         </div>
         <div className="flex items-center space-x-3">
           <button
-            onClick={() => fetchUsers(currentPage)}
+            onClick={refreshPatient}
             className="flex cursor-pointer items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
           >
             <RefreshCcw className="w-4 h-4" />
