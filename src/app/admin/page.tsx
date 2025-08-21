@@ -32,18 +32,7 @@ import Header from "./components/Header";
 import AppointmentTable from "./components/AppointmentTable";
 import Pagination from "@/components/fragment/Paginations";
 import PatientTab from "./components/PatientTab";
-
-interface Doctor {
-  id: string;
-  name: string;
-  specialization: string;
-  phone: string;
-  email: string;
-  schedule: string;
-  patients: number;
-  status: "available" | "busy" | "off";
-  experience: string;
-}
+import DoctorTab from "./components/DoctorTab";
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -124,53 +113,6 @@ const AdminDashboard: React.FC = () => {
     }
     //eslint-disable-next-line
   }, [currentPage]);
-
-  const [doctors] = useState<Doctor[]>([
-    {
-      id: "D001",
-      name: "Dr. Sarah Wijaya",
-      specialization: "Dokter Umum",
-      phone: "081234567800",
-      email: "sarah@klinik.com",
-      schedule: "Senin-Jumat 08:00-16:00",
-      patients: 45,
-      status: "available",
-      experience: "8 tahun",
-    },
-    {
-      id: "D002",
-      name: "Dr. Ahmad Hidayat",
-      specialization: "Dokter Anak",
-      phone: "081234567801",
-      email: "ahmad@klinik.com",
-      schedule: "Senin-Sabtu 09:00-17:00",
-      patients: 38,
-      status: "busy",
-      experience: "12 tahun",
-    },
-    {
-      id: "D003",
-      name: "Dr. Lisa Pratama",
-      specialization: "Dokter Kandungan",
-      phone: "081234567802",
-      email: "lisa@klinik.com",
-      schedule: "Selasa-Sabtu 10:00-18:00",
-      patients: 28,
-      status: "available",
-      experience: "6 tahun",
-    },
-    {
-      id: "D004",
-      name: "Dr. Rahman Surya",
-      specialization: "Dokter Gigi",
-      phone: "081234567803",
-      email: "rahman@klinik.com",
-      schedule: "Senin-Jumat 13:00-21:00",
-      patients: 32,
-      status: "off",
-      experience: "10 tahun",
-    },
-  ]);
 
   const getStatusBadge = (status: string) => {
     const statusStyles = {
@@ -276,93 +218,7 @@ const AdminDashboard: React.FC = () => {
         {activeTab === "patients" && <PatientTab />}
 
         {activeTab === "doctors" && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-              <div>
-                <h2 className="text-3xl font-bold text-slate-800">
-                  Data Dokter
-                </h2>
-                <p className="text-slate-600 mt-1">
-                  Kelola informasi dokter dan jadwal praktik
-                </p>
-              </div>
-              <button className="flex items-center space-x-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
-                <Plus className="w-4 h-4" />
-                <span>Tambah Dokter</span>
-              </button>
-            </div>
-
-            {/* Doctors Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {doctors.map((doctor) => (
-                <div
-                  key={doctor.id}
-                  className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                        <Stethoscope className="w-6 h-6 text-emerald-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-slate-800">
-                          {doctor.name}
-                        </h3>
-                        <p className="text-sm text-slate-600">
-                          {doctor.specialization}
-                        </p>
-                      </div>
-                    </div>
-                    {getStatusBadge(doctor.status)}
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Phone className="w-4 h-4 text-slate-400" />
-                      <span className="text-sm text-slate-600">
-                        {doctor.phone}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Mail className="w-4 h-4 text-slate-400" />
-                      <span className="text-sm text-slate-600">
-                        {doctor.email}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-4 h-4 text-slate-400" />
-                      <span className="text-sm text-slate-600">
-                        {doctor.schedule}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Users className="w-4 h-4 text-slate-400" />
-                      <span className="text-sm text-slate-600">
-                        {doctor.patients} pasien aktif
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <UserCheck className="w-4 h-4 text-slate-400" />
-                      <span className="text-sm text-slate-600">
-                        Pengalaman: {doctor.experience}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2 mt-4 pt-4 border-t border-slate-200">
-                    <button className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
-                      <Eye className="w-4 h-4" />
-                      <span>Detail</span>
-                    </button>
-                    <button className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                      <Edit className="w-4 h-4" />
-                      <span>Edit</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <DoctorTab getStatusBadge={getStatusBadge} doctorsPage={doctorPage} />
         )}
 
         {activeTab === "queue" && (
