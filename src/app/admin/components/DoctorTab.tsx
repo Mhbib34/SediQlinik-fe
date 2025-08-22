@@ -120,7 +120,9 @@ const DoctorTab = ({ getStatusBadge, doctorsPage }: Props) => {
                 className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
               >
                 <Edit className="w-4 h-4" />
-                <span>Edit</span>
+                <span>
+                  {doctor.day_of_week == null ? "Tambah Jadwal" : "Edit Jadwal"}
+                </span>
               </button>
             </div>
           </div>

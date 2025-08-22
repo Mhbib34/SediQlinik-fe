@@ -26,6 +26,7 @@ type EditDoctorData = {
   start_time: string;
   end_time: string;
   is_active: boolean;
+  status?: string;
 };
 
 const dayOptions = [
@@ -44,10 +45,11 @@ const EditDoctorModal = ({ doctor, setIsOpen }: Props) => {
       ? doctor.day_of_week
       : doctor.day_of_week
       ? [doctor.day_of_week]
-      : ["monday"],
+      : [],
     start_time: doctor.start_time || "08:00",
     end_time: doctor.end_time || "17:00",
     is_active: doctor.is_active === true,
+    status: doctor.status,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,11 +96,19 @@ const EditDoctorModal = ({ doctor, setIsOpen }: Props) => {
     setIsSubmitting(true);
 
     try {
-      const res = await axiosInstance.put(
-        `/v1/doctors/${doctor.id}/schedule/${doctor.schedule_id}`,
-        formData
-      );
-      showSuccess(res.data.message);
+      let res;
+      if (doctor.day_of_week !== null) {
+        res = await axiosInstance.put(
+          `/v1/doctors/${doctor.id}/schedule/${doctor.schedule_id}`,
+          formData
+        );
+      } else if (doctor.day_of_week === null) {
+        res = await axiosInstance.post(
+          `/v1/doctors/${doctor.id}/schedule`,
+          formData
+        );
+      }
+      showSuccess(res?.data.message);
       setIsOpen(false);
       fetchDoctorPage(1);
     } catch (error) {
@@ -307,7 +317,7 @@ const EditDoctorModal = ({ doctor, setIsOpen }: Props) => {
               </div>
             </div>
 
-            {/* Status Toggle */}
+            {/* Is Active Toggle */}
             <div className="space-y-3">
               <label className="flex items-center space-x-2 text-sm font-medium text-slate-700">
                 {formData.is_active ? (
@@ -348,6 +358,30 @@ const EditDoctorModal = ({ doctor, setIsOpen }: Props) => {
               </div>
             </div>
 
+            {/* Status */}
+            <div>
+              <label className="flex items-center space-x-2 text-sm font-medium text-slate-700">
+                <Clock className="w-4 h-4 text-teal-600" />
+                <span>Status Jadwal</span>
+              </label>
+              <select
+                value={formData.status}
+                onChange={(e) => handleInputChange("status", e.target.value)}
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all ${
+                  errors.status
+                    ? "border-red-300 bg-red-50"
+                    : "border-slate-300"
+                }`}
+              >
+                <option value="available">Tersedia</option>
+                <option value="active">Aktif</option>
+                <option value="inactive">Tidak Aktif</option>
+                <option value="scheduled">Terjadwal</option>
+                <option value="off">Tidak Tersedia</option>
+                <option value="busy">Sibuk</option>
+              </select>
+            </div>
+
             {/* Preview */}
             <div className="bg-gradient-to-r from-slate-50 to-blue-50 rounded-xl p-4 border border-slate-200">
               <h4 className="font-medium text-slate-800 mb-3">
@@ -364,6 +398,14 @@ const EditDoctorModal = ({ doctor, setIsOpen }: Props) => {
                   <Clock className="w-4 h-4 text-blue-600" />
                   <span className="text-slate-600">
                     {formData.start_time} - {formData.end_time}
+                  </span>
+                </div>
+
+                {/* Status */}
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4 text-teal-600" />
+                  <span className="text-slate-600">
+                    {formData.status?.toUpperCase()}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">

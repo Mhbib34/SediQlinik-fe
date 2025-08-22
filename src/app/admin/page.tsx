@@ -2,17 +2,10 @@
 import React, { useEffect, useState } from "react";
 import {
   Users,
-  Clock,
   Settings,
   Plus,
-  Eye,
-  Edit,
   DollarSign,
   BarChart3,
-  UserCheck,
-  Stethoscope,
-  Phone,
-  Mail,
   Check,
   AlertCircle,
   Building2,
