@@ -1,74 +1,96 @@
-import { Appointment } from "@/types/appointment";
+import { useAppointmentStore } from "@/store/appointment-store";
+import { useQueueStore } from "@/store/queue-store";
+import { AppointmentPage } from "@/types/appointment";
 import { DoctorPage } from "@/types/doctor";
+import { isErrorResponse } from "@/utils/error-response";
 import {
+  AlertCircle,
   AppWindow,
   AppWindowMacIcon,
-  Calendar,
+  CheckCircle,
   FileText,
   Plus,
   Stethoscope,
   UserCheck,
   Users,
 } from "lucide-react";
-import React from "react";
-export interface Queue {
-  doctors_on_duty: number;
-  queue_stats: {
-    completed: number;
-    in_progress: number;
-    waiting: number;
-    total_queues: number;
-  };
-  today: {
-    cancelled_appointments: number;
-    completed_appointments: number;
-    pending_appointments: number;
-    total_appointments: number;
-  };
-}
+import React, { useEffect, useState } from "react";
+import { useShallow } from "zustand/shallow";
 
 type Props = {
-  stats: Queue;
-  todayAppointments: Appointment[];
+  currentPage: number;
   doctorPage: DoctorPage;
   getStatusBadge: (status: string) => React.ReactNode;
   children?: React.ReactNode;
 };
 
 const Dashboard = ({
-  stats,
-  todayAppointments,
   doctorPage,
   getStatusBadge,
   children,
+  currentPage,
 }: Props) => {
+  const { queueStats, fetchQueueStats } = useQueueStore(
+    useShallow((state) => {
+      return {
+        queueStats: state.queueStats,
+        fetchQueueStats: state.fetchQueueStats,
+      };
+    })
+  );
+  const { fetchAppointmentPage } = useAppointmentStore(
+    useShallow((state) => ({
+      fetchAppointmentPage: state.fetchAppointmentPage,
+    }))
+  );
+  const [todayAppointments, setTodayAppointments] = useState<
+    AppointmentPage | undefined
+  >(undefined);
+
+  useEffect(() => {
+    fetchQueueStats();
+    try {
+      const fetchTodayAppointments = async () => {
+        const today = await fetchAppointmentPage(currentPage, {
+          appointment_date: new Date().toISOString().split("T")[0],
+        });
+        setTodayAppointments(today);
+      };
+      fetchTodayAppointments();
+    } catch (error) {
+      isErrorResponse(error, "Failed to fetch today's appointments.");
+    }
+    // eslint-disable-next-line
+  }, [currentPage]);
+
   const currentDate = new Date().toLocaleDateString("id-ID", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
+
   const StatsCard = [
     {
-      title: "Total Antrian",
-      value: stats.queue_stats.completed,
-      icon: Calendar,
+      title: "Total Antrian Selesai Hari Ini",
+      value: queueStats?.queue_stats?.completed ?? 0,
+      icon: CheckCircle,
       color: "bg-emerald-500",
     },
     {
       title: "Total Doctor Aktif Hari Ini",
-      value: stats.doctors_on_duty,
+      value: queueStats?.doctors_on_duty ?? 0,
       icon: Users,
       color: "bg-blue-500",
     },
     {
       title: "Total Appointment Hari Ini",
-      value: stats.today.total_appointments,
+      value: queueStats?.today?.total_appointments ?? 0,
       icon: AppWindowMacIcon,
       color: "bg-amber-500",
     },
     {
-      title: "Total Antrian",
-      value: stats?.queue_stats.total_queues,
+      title: "Total Antrian Hari Ini",
+      value: queueStats?.queue_stats?.total_queues ?? 0,
       icon: AppWindow,
       color: "bg-green-500",
     },
@@ -167,7 +189,7 @@ const Dashboard = ({
             Appointment Hari Ini
           </h3>
           <div className="space-y-3">
-            {todayAppointments.slice(0, 5).map((appointment) => (
+            {todayAppointments?.data.slice(0, 5).map((appointment) => (
               <div
                 key={appointment.id}
                 className="flex items-center justify-between"
@@ -189,6 +211,16 @@ const Dashboard = ({
               </div>
             ))}
           </div>
+
+          {todayAppointments?.data.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-12 text-slate-500">
+              <AlertCircle className="w-12 h-12 mb-4 text-slate-300" />
+              <p className="text-lg font-medium mb-2">Tidak ada appointment</p>
+              <p className="text-sm">
+                Belum ada pasien yang mendaftar hari ini
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

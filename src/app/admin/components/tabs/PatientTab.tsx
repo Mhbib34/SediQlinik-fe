@@ -1,5 +1,6 @@
 "use client";
 import RegisterPage from "@/app/(main)/(auth)/register/page";
+import ButtonRefresh from "@/components/fragment/ButtonRefresh";
 import PageLoader from "@/components/fragment/PageLoader";
 import Pagination from "@/components/fragment/Paginations";
 import { showSuccess } from "@/lib/sonner";
@@ -76,13 +77,7 @@ const PatientTab = () => {
           <p className="text-slate-600 mt-1">Kelola informasi pasien klinik</p>
         </div>
         <div className="flex items-center space-x-3">
-          <button
-            onClick={refreshPatient}
-            className="flex cursor-pointer items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            <RefreshCcw className="w-4 h-4" />
-            <span>Refresh</span>
-          </button>
+          <ButtonRefresh refresh={refreshPatient} />
           <button
             onClick={() => setIsOpen(true)}
             className="flex cursor-pointer items-center space-x-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"

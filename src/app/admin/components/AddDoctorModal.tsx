@@ -83,7 +83,7 @@ const AddDoctorModal = ({ setIsOpen }: Props) => {
     }
   };
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-md">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-md animate-slideUp">
       <div className="absolute top-4 right-4 cursor-pointer bg-white rounded-md group">
         <X
           className="w-6 h-6 text-emerald-600 font-bold group-hover:rotate-180 group-hover:text-red-600 transition-all"

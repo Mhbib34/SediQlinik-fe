@@ -25,7 +25,7 @@ type Props = {
 
 const DoctorDetailModal = ({ doctor, setIsOpen, getStatusBadge }: Props) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center animate-slideUp">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
