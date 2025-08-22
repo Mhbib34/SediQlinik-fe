@@ -12,9 +12,9 @@ import {
   WorkflowIcon,
 } from "lucide-react";
 import React, { useState } from "react";
-import AddDoctorModal from "./AddDoctorModal";
-import DoctorDetailModal from "./DoctorDetailModal";
-import EditDoctorModal from "./EditDoctorModal";
+import AddDoctorModal from "../AddDoctorModal";
+import DoctorDetailModal from "../DoctorDetailModal";
+import EditDoctorModal from "../EditDoctorModal";
 
 type Props = {
   getStatusBadge: (status: string) => React.ReactNode;
