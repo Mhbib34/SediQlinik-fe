@@ -33,7 +33,7 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
         page: number;
         size: number;
         appointment_date?: string;
-      } = { page, size: 5 };
+      } = { page, size: 10 };
 
       if (keyword?.appointment_date)
         params.appointment_date = keyword.appointment_date;

@@ -122,7 +122,7 @@ const PatientTab = () => {
                     className="border-b border-slate-100 hover:bg-slate-50 transition-colors"
                   >
                     <td className="py-4 text-sm text-slate-600">
-                      {patient.id.slice(0, 8)}
+                      {patient.id}
                     </td>
                     <td className="py-4">
                       <div>
