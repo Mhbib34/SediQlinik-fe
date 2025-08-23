@@ -153,7 +153,6 @@ const AdminDashboard: React.FC = () => {
             <AppointmentTable
               setActiveTab={setActiveTab}
               appointmentPage={appointments!}
-              getStatusBadge={getStatusBadge}
             />
           </Dashboard>
         )}
@@ -162,7 +161,6 @@ const AdminDashboard: React.FC = () => {
           <AppointmentTab
             doctors={doctorPage.data}
             todayAppointments={filteredAppointments!}
-            getStatusBadge={getStatusBadge}
             filterStatus={filterStatus!}
             setFilterStatus={setFilterStatus}
             filterDoctor={filterDoctor!}

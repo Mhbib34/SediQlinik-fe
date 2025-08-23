@@ -1,13 +1,13 @@
 import { Appointment } from "@/types/appointment";
 import { Doctor } from "@/types/doctor";
 import { Format } from "@/utils/format";
-import { Edit, Eye, Filter, Phone, Trash2 } from "lucide-react";
+import { Filter, Phone } from "lucide-react";
 import React from "react";
+import StatusDropdown from "../AppointmentStatusListBox";
 
 type Props = {
   doctors: Doctor[];
   todayAppointments: Appointment[];
-  getStatusBadge: (status: string) => React.ReactNode;
   filterStatus: string;
   setFilterStatus: React.Dispatch<React.SetStateAction<string>>;
   filterDoctor: string;
@@ -18,7 +18,6 @@ type Props = {
 const AppointmentTab = ({
   doctors,
   todayAppointments,
-  getStatusBadge,
   filterStatus,
   setFilterStatus,
   filterDoctor,
@@ -50,7 +49,7 @@ const AppointmentTab = ({
           >
             <option value="all">Semua Status</option>
             <option value="pending">Terjadwal</option>
-            <option value="confirmed">Dikonfirmasi</option>
+            <option value="confirmed">Diproses</option>
             <option value="completed">Selesai</option>
             <option value="cancelled">Dibatalkan</option>
           </select>
@@ -97,9 +96,6 @@ const AppointmentTab = ({
                   <th className="pb-3 text-sm font-medium text-slate-600">
                     Status
                   </th>
-                  <th className="pb-3 text-sm font-medium text-slate-600">
-                    Aksi
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -136,20 +132,7 @@ const AppointmentTab = ({
                       {appointment.complaint}
                     </td>
                     <td className="py-4">
-                      {getStatusBadge(appointment.status)}
-                    </td>
-                    <td className="py-4">
-                      <div className="flex items-center space-x-1">
-                        <button className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                      <StatusDropdown appointment={appointment} />
                     </td>
                   </tr>
                 ))}
