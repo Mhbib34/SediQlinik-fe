@@ -1,4 +1,4 @@
-import { showConfirm } from "@/lib/sonner";
+import { showConfirm, showWarning } from "@/lib/sonner";
 import { User } from "@/types/user";
 import { ChevronDown, LogOut, Settings, Shield, User2 } from "lucide-react";
 import React from "react";
@@ -34,15 +34,24 @@ const Profile = ({
 
       {showProfileDropdown && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
-          <button className="flex items-center space-x-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full transition-colors">
+          <button
+            onClick={() => showWarning("Fitur sedang dalam pengembangan")}
+            className="flex items-center cursor-pointer space-x-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full transition-colors"
+          >
             <User2 className="w-4 h-4" />
             <span>Profil Saya</span>
           </button>
-          <button className="flex items-center space-x-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full transition-colors">
+          <button
+            onClick={() => showWarning("Fitur sedang dalam pengembangan")}
+            className="flex items-center cursor-pointer space-x-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full transition-colors"
+          >
             <Settings className="w-4 h-4" />
             <span>Pengaturan</span>
           </button>
-          <button className="flex items-center space-x-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full transition-colors">
+          <button
+            onClick={() => showWarning("Fitur sedang dalam pengembangan")}
+            className="flex items-center cursor-pointer space-x-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full transition-colors"
+          >
             <Shield className="w-4 h-4" />
             <span>Keamanan</span>
           </button>
@@ -56,7 +65,7 @@ const Profile = ({
                 "Keluar"
               )
             }
-            className="flex items-center space-x-3 px-4 py-2 text-sm text-red-700 hover:bg-red-50 w-full transition-colors"
+            className="flex items-center space-x-3 px-4 py-2 text-sm text-red-700 hover:bg-red-50 w-full transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Keluar</span>

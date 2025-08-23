@@ -8,7 +8,6 @@ import {
   AppWindow,
   AppWindowMacIcon,
   CheckCircle,
-  FileText,
   Plus,
   Stethoscope,
   UserCheck,
@@ -16,6 +15,8 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import AddDoctorModal from "../AddDoctorModal";
+import AddPatientModal from "../AddPatientModal";
 
 type Props = {
   currentPage: number;
@@ -30,6 +31,8 @@ const Dashboard = ({
   children,
   currentPage,
 }: Props) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { queueStats, fetchQueueStats } = useQueueStore(
     useShallow((state) => {
       return {
@@ -64,9 +67,10 @@ const Dashboard = ({
   }, [currentPage]);
 
   const currentDate = new Date().toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
+    weekday: "long",
     year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   const StatsCard = [
@@ -95,6 +99,7 @@ const Dashboard = ({
       color: "bg-green-500",
     },
   ];
+
   return (
     <div className="sm:space-y-8">
       {/* Header */}
@@ -142,17 +147,19 @@ const Dashboard = ({
             Aksi Cepat
           </h3>
           <div className="space-y-3">
-            <button className="flex items-center space-x-3 w-full p-3 text-left hover:bg-slate-50 rounded-lg transition-colors">
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex items-center space-x-3 w-full p-3 text-left hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+            >
               <Plus className="w-5 h-5 text-emerald-500" />
-              <span className="text-slate-700">Buat Appointment Baru</span>
+              <span className="text-slate-700">Buat Doctor Baru</span>
             </button>
-            <button className="flex items-center space-x-3 w-full p-3 text-left hover:bg-slate-50 rounded-lg transition-colors">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="flex items-center space-x-3 w-full p-3 text-left hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+            >
               <UserCheck className="w-5 h-5 text-blue-500" />
               <span className="text-slate-700">Daftar Pasien Baru</span>
-            </button>
-            <button className="flex items-center space-x-3 w-full p-3 text-left hover:bg-slate-50 rounded-lg transition-colors">
-              <FileText className="w-5 h-5 text-purple-500" />
-              <span className="text-slate-700">Lihat Laporan</span>
             </button>
           </div>
         </div>
@@ -226,6 +233,8 @@ const Dashboard = ({
 
       {/* Recent Appointments Table */}
       {children}
+      {isAddModalOpen && <AddDoctorModal setIsOpen={setIsAddModalOpen} />}
+      {isOpen && <AddPatientModal setIsOpen={setIsOpen} />}
     </div>
   );
 };
