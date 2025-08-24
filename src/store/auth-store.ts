@@ -30,14 +30,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
   setUsers: (users: UserPage) => set({ users }),
   fetchUser: async () => {
     try {
-      const hasToken = document.cookie.includes("accessToken=");
-      if (!hasToken) {
-        console.log("🔄 No accessToken, trying refresh...");
-        await axiosInstance.post("/v1/auth/refresh", null, {
-          withCredentials: true,
-        });
-      }
-      
       const res = await axiosInstance.get("/v1/users", {
         withCredentials: true,
       });

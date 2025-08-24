@@ -22,6 +22,7 @@ import { useDebouncedValue } from "@/utils/useDebounce";
 import { Format } from "@/utils/format";
 import { showError, showSuccess } from "@/lib/sonner";
 import ButtonRefresh from "@/components/fragment/ButtonRefresh";
+import { getCurrentTime } from "@/utils/time";
 
 const QueuePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -98,17 +99,6 @@ const QueuePage = () => {
 
     return matchesSearch && matchesStatus;
   });
-
-  const getCurrentTime = () => {
-    return new Date().toLocaleString("id-ID", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   const handleViewDetail = (queue: Queue) => {
     setSelectedQueue(queue);
