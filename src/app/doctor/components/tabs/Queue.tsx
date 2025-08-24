@@ -1,17 +1,61 @@
 import Pagination from "@/components/fragment/Paginations";
+import axiosInstance from "@/lib/axiosInstance";
+import { showSuccess } from "@/lib/sonner";
 import { QueuePage } from "@/types/queue";
+import { isErrorResponse } from "@/utils/error-response";
 import { Format } from "@/utils/format";
 import { getCurrentTime } from "@/utils/time";
-import { Calendar, Filter, Search, User } from "lucide-react";
-import React from "react";
+import { Calendar, User } from "lucide-react";
 
 type Props = {
   queuePage: QueuePage;
   currentPage: number;
   setCurrentPage: (page: number) => void;
+  getStatusBadge: (status: string) => React.ReactNode;
+  fetchQueuePage: (page: number) => Promise<QueuePage | undefined>;
 };
 
-const Queue = ({ queuePage, currentPage, setCurrentPage }: Props) => {
+const Queue = ({
+  queuePage,
+  currentPage,
+  setCurrentPage,
+  getStatusBadge,
+  fetchQueuePage,
+}: Props) => {
+  const handleCalledPatient = async (id: string) => {
+    try {
+      const res = await axiosInstance.put(`/v1/queues/${id}/call`, {
+        withCredentials: true,
+      });
+      showSuccess(res.data.message);
+      fetchQueuePage(currentPage);
+    } catch (error) {
+      isErrorResponse(error, "Called patient failed. Please try again.");
+    }
+  };
+  const handleCompletedPatient = async (id: string) => {
+    try {
+      const res = await axiosInstance.put(`/v1/queues/${id}/complete`, {
+        withCredentials: true,
+      });
+      showSuccess(res.data.message);
+      fetchQueuePage(currentPage);
+    } catch (error) {
+      isErrorResponse(error, "Complete patient failed. Please try again.");
+    }
+  };
+  const handleSkipPatient = async (id: string) => {
+    try {
+      const res = await axiosInstance.put(`/v1/queues/${id}/skip`, {
+        withCredentials: true,
+      });
+      showSuccess(res.data.message);
+      fetchQueuePage(currentPage);
+    } catch (error) {
+      isErrorResponse(error, "Skip patient failed. Please try again.");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -20,20 +64,6 @@ const Queue = ({ queuePage, currentPage, setCurrentPage }: Props) => {
             Semua Antrian Hari Ini
           </h2>
           <p className="text-sm text-slate-500">{getCurrentTime()}</p>
-        </div>
-        <div className="flex space-x-3">
-          <div className="relative">
-            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Cari pasien..."
-              className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <button className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 flex items-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <span>Filter</span>
-          </button>
         </div>
       </div>
 
@@ -65,19 +95,55 @@ const Queue = ({ queuePage, currentPage, setCurrentPage }: Props) => {
                         Nomor Antrian : {queue.queue_number}
                       </span>
                     </div>
+                    <div
+                      className={`${
+                        queue.status === "completed" ||
+                        queue.status === "cancelled"
+                          ? "hidden"
+                          : ""
+                      } space-x-4 mt-1`}
+                    >
+                      <span>{getStatusBadge(queue.status!)}</span>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-yellow-600 text-white rounded-md text-sm hover:bg-yellow-700 transition-colors cursor-pointer">
+                  <div
+                    className={`${
+                      queue.status === "completed" ||
+                      queue.status === "cancelled"
+                        ? "hidden"
+                        : ""
+                    } flex space-x-2`}
+                  >
+                    <button
+                      onClick={() => handleCalledPatient(queue.id)}
+                      className="px-3 py-1 bg-yellow-600 text-white rounded-md text-sm hover:bg-yellow-700 transition-colors cursor-pointer"
+                    >
                       Panggil
                     </button>
-                    <button className="px-3 py-1 bg-emerald-600 text-white rounded-md text-sm hover:bg-emerald-700 transition-colors cursor-pointer">
+                    <button
+                      onClick={() => handleCompletedPatient(queue.id)}
+                      className="px-3 py-1 bg-emerald-600 text-white rounded-md text-sm hover:bg-emerald-700 transition-colors cursor-pointer"
+                    >
                       Selesai
                     </button>
-                    <button className="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition-colors cursor-pointer">
+                    <button
+                      onClick={() => handleSkipPatient(queue.id)}
+                      className="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition-colors cursor-pointer"
+                    >
                       Skip
                     </button>
+                  </div>
+                  <div
+                    className={`${
+                      queue.status === "waiting" ||
+                      queue.status === "in_progress"
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
+                    <span>{getStatusBadge(queue.status!)}</span>
                   </div>
                 </div>
               </div>

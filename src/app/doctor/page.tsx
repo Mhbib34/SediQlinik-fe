@@ -30,7 +30,9 @@ const DoctorDashboard = () => {
   );
   useEffect(() => {
     if (!user?.name) return;
-    fetchQueuePage(currentPage, { search: user.name });
+    fetchQueuePage(currentPage, {
+      doctor_name: user.name,
+    });
     // eslint-disable-next-line
   }, [user?.name, currentPage]);
 
@@ -66,6 +68,48 @@ const DoctorDashboard = () => {
       age: 29,
     },
   ];
+
+  const getStatusBadge = (status: string) => {
+    const statusStyles = {
+      scheduled: "bg-blue-100 text-blue-800 border-blue-200",
+      completed: "bg-green-100 text-green-800 border-green-200",
+      cancelled: "bg-red-100 text-red-800 border-red-200",
+      confirmed: "bg-blue-100 text-blue-800 border-blue-200",
+      in_progress: "bg-purple-100 text-purple-800 border-purple-200",
+      active: "bg-green-100 text-green-800 border-green-200",
+      inactive: "bg-gray-100 text-gray-800 border-gray-200",
+      available: "bg-green-100 text-green-800 border-green-200",
+      busy: "bg-red-100 text-red-800 border-red-200",
+      off: "bg-gray-100 text-gray-800 border-gray-200",
+      pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      waiting: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    };
+
+    const statusText = {
+      scheduled: "Terjadwal",
+      completed: "Selesai",
+      cancelled: "Dibatalkan",
+      in_progress: "Berlangsung",
+      active: "Aktif",
+      inactive: "Tidak Aktif",
+      available: "Tersedia",
+      busy: "Sibuk",
+      off: "Libur",
+      pending: "Terjadwal",
+      waiting: "Menunggu",
+      confirmed: "Dikonfirmasi",
+    };
+
+    return (
+      <span
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
+          statusStyles[status as keyof typeof statusStyles]
+        }`}
+      >
+        {statusText[status as keyof typeof statusText]}
+      </span>
+    );
+  };
 
   const renderPatients = () => (
     <div className="space-y-6">
@@ -299,6 +343,8 @@ const DoctorDashboard = () => {
             queuePage={queuePage}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            getStatusBadge={getStatusBadge}
+            fetchQueuePage={fetchQueuePage}
           />
         )}
         {activeTab === "patients" && renderPatients()}
