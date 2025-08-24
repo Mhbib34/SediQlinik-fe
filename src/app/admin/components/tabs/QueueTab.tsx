@@ -44,7 +44,10 @@ const QueuePage = () => {
     );
 
   useEffect(() => {
-    fetchQueuePage(currentPage, { search: useDebouncedSearchTerm });
+    fetchQueuePage(currentPage, {
+      doctor_name: useDebouncedSearchTerm,
+      patient_name: useDebouncedSearchTerm,
+    });
     fetchQueueStats();
     // eslint-disable-next-line
   }, [currentPage, useDebouncedSearchTerm]);
@@ -90,9 +93,11 @@ const QueuePage = () => {
   };
 
   const filteredQueue = queuePage.data.filter((item) => {
-    const matchesSearch = item.doctor
-      ?.doctor_name!.toLowerCase()
-      .includes(useDebouncedSearchTerm.toLowerCase());
+    const term = useDebouncedSearchTerm.toLowerCase();
+
+    const matchesSearch =
+      item.doctor?.doctor_name?.toLowerCase().includes(term) ||
+      item.appointment?.patient_name?.toLowerCase().includes(term);
 
     const matchesStatus =
       statusFilter === "all" || item.status === statusFilter;

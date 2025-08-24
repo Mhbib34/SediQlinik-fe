@@ -8,7 +8,7 @@ type QueueStore = {
   loading: boolean;
   fetchQueuePage: (
     page: number,
-    keyword?: { search?: string }
+    keyword?: { doctor_name?: string; patient_name?: string }
   ) => Promise<QueuePage | undefined>;
   fetchQueueStats: () => Promise<void>;
   setQueuePage: (queuePage: QueuePage) => void;
@@ -43,21 +43,29 @@ export const useQueueStore = create<QueueStore>((set) => ({
   loading: true,
   setQueuePage: (queuePage: QueuePage) => set({ queuePage }),
   setQueueStats: (queueStats: QueueTodayStats) => set({ queueStats }),
-  fetchQueuePage: async (page: number = 1, keyword?: { search?: string }) => {
+  fetchQueuePage: async (
+    page: number = 1,
+    keyword?: { doctor_name?: string; patient_name?: string }
+  ) => {
     try {
       const params: {
         page: number;
         size: number;
-        search?: string;
+        doctor_name?: string;
+        patient_name?: string;
       } = { page, size: 10 };
 
-      if (keyword?.search) params.search = keyword.search;
+      if (keyword?.doctor_name?.trim())
+        params.doctor_name = keyword.doctor_name;
+      if (keyword?.patient_name?.trim())
+        params.patient_name = keyword.patient_name;
 
       const res = await axiosInstance.get("/v1/queues", {
         params,
         withCredentials: true,
       });
       console.log(res.data);
+      console.log(params);
 
       set({ queuePage: res.data, loading: false });
       console.log(res.data);

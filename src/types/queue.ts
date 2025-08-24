@@ -7,7 +7,7 @@ export enum QueueStatus {
 }
 
 export type Queue = {
-  id: number;
+  id: string;
   appointment?: {
     id?: string;
     complaint?: string;
