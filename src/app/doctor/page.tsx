@@ -11,7 +11,12 @@ import { useQueueStore } from "@/store/queue-store";
 import Queue from "./components/tabs/Queue";
 
 const DoctorDashboard = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("activeTab") || "dashboard";
+    }
+    return "dashboard";
+  });
   const [currentPage, setCurrentPage] = useState(1);
 
   const { user, logout } = useAuthStore(
@@ -28,6 +33,13 @@ const DoctorDashboard = () => {
       loading: state.loading,
     }))
   );
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("activeTab", activeTab);
+    }
+  }, [activeTab]);
+
   useEffect(() => {
     if (!user?.name) return;
     fetchQueuePage(currentPage, {
@@ -336,7 +348,11 @@ const DoctorDashboard = () => {
       {/* Main Content */}
       <main className=" px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === "dashboard" && (
-          <Dashboard queuePage={queuePage} setActiveTab={setActiveTab} />
+          <Dashboard
+            queuePage={queuePage}
+            setActiveTab={setActiveTab}
+            getStatusBadge={getStatusBadge}
+          />
         )}
         {activeTab === "antrian" && (
           <Queue
@@ -345,6 +361,7 @@ const DoctorDashboard = () => {
             setCurrentPage={setCurrentPage}
             getStatusBadge={getStatusBadge}
             fetchQueuePage={fetchQueuePage}
+            user_id={user!.id}
           />
         )}
         {activeTab === "patients" && renderPatients()}

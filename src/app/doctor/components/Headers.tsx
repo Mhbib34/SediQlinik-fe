@@ -30,7 +30,7 @@ const Headers = ({ activeTab, setActiveTab, user, logout }: Props) => {
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <div className="w-4 h-4 bg-white rounded-sm"></div>
             </div>
-            <span className="text-xl font-bold text-slate-900">MediCare</span>
+            <span className="text-xl font-bold text-slate-900">SediQlinik</span>
             <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
               Doctor
             </span>

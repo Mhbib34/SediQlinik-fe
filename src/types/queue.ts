@@ -30,6 +30,7 @@ export type Queue = {
   notes?: string;
   created_at?: Date;
   updated_at?: Date;
+  next_queue?: number;
 };
 
 export type QueuePage = {
@@ -41,6 +42,13 @@ export type QueuePage = {
   };
 };
 
+export type RealtimeQueue = {
+  called_at: Date;
+  id: string;
+  next_queue: number;
+  queue_number: number;
+  patient_name: string;
+};
 export interface QueueTodayStats {
   doctors_on_duty: number;
   queue_stats: {
