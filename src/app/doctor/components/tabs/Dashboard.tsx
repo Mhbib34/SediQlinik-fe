@@ -6,8 +6,9 @@ import { Calendar, Clock, User2 } from "lucide-react";
 type Props = {
   setActiveTab: (tab: string) => void;
   queuePage: QueuePage;
+  getStatusBadge: (status: string) => React.ReactNode;
 };
-const Dashboard = ({ setActiveTab, queuePage }: Props) => {
+const Dashboard = ({ setActiveTab, queuePage, getStatusBadge }: Props) => {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
@@ -89,15 +90,7 @@ const Dashboard = ({ setActiveTab, queuePage }: Props) => {
                     <p className="font-medium text-slate-900">
                       {Format.formatDate(queue.queue_date!)}
                     </p>
-                    <span
-                      className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                        queue.status === "confirmed"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-amber-100 text-amber-800"
-                      }`}
-                    >
-                      {queue.status}
-                    </span>
+                    <span>{getStatusBadge(queue.status!)}</span>
                   </div>
                 </div>
               </div>

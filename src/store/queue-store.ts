@@ -64,11 +64,8 @@ export const useQueueStore = create<QueueStore>((set) => ({
         params,
         withCredentials: true,
       });
-      console.log(res.data);
-      console.log(params);
 
       set({ queuePage: res.data, loading: false });
-      console.log(res.data);
 
       return res.data as QueuePage;
       //eslint-disable-next-line
