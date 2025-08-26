@@ -1,7 +1,7 @@
 import { showConfirm } from "@/lib/sonner";
 import { User } from "@/types/user";
 import { isErrorResponse } from "@/utils/error-response";
-import { Calendar, Clock, FileText, LogOut, User2, Users } from "lucide-react";
+import { Calendar, Clock, FileText, LogOut, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -84,12 +84,6 @@ const Headers = ({ activeTab, setActiveTab, user, logout }: Props) => {
                   {user?.name}
                 </p>
               </div>
-              <button
-                onClick={() => setActiveTab("profile")}
-                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-              >
-                <User2 className="w-4 h-4" />
-              </button>
               <button
                 onClick={() =>
                   showConfirm(

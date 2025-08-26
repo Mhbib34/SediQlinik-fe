@@ -133,76 +133,74 @@ const Queue = ({
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Dashboard Antrian
-              </h1>
-              <p className="text-gray-600 mt-1">
-                {doctor?.name} - {doctor?.specialization}
-              </p>
-            </div>
+      {/* Header */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Dashboard Antrian
+            </h1>
+            <p className="text-gray-600 mt-1">
+              {doctor?.name} - {doctor?.specialization}
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Queue Controls & Stats */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Queue Controls */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold mb-4">Kontrol Antrian</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Queue Controls & Stats */}
+        <div className="lg:col-span-1 space-y-6">
+          {/* Queue Controls */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold mb-4">Kontrol Antrian</h2>
 
-              <div className="text-center mb-6">
-                <div className="text-8xl font-bold text-blue-600 mb-2">
-                  {queues?.queue_number}
-                </div>
-                <div className="text-lg text-gray-600">Nomor Saat Ini</div>
+            <div className="text-center mb-6">
+              <div className="text-8xl font-bold text-blue-600 mb-2">
+                {queues?.queue_number}
               </div>
+              <div className="text-lg text-gray-600">Nomor Saat Ini</div>
             </div>
-
-            {/* Current Patient */}
-            {queues.patient_name && (
-              <>
-                <QueuePatientInfo
-                  queues={queues}
-                  setIsOpen={setIsOpen}
-                  handleSkipPatient={handleSkipPatient}
-                />
-
-                {isOpen && (
-                  <FormCompleteQueue
-                    setIsOpen={setIsOpen}
-                    handleInputChange={handleInputChange}
-                    completeForm={completeForm}
-                    handleCompletedPatient={handleCompletedPatient}
-                    isLoading={isLoading}
-                    queues={queues}
-                  />
-                )}
-              </>
-            )}
-
-            {/* Stats */}
-            <QueueStats queuePage={queuePage} />
           </div>
 
-          {/* Right Column - Patient Queue */}
-          <QueuePatientTable
-            queuePage={queuePage}
-            getStatusBadge={getStatusBadge}
-            handleCalledPatient={handleCalledPatient}
-          />
+          {/* Current Patient */}
+          {queues.patient_name && (
+            <>
+              <QueuePatientInfo
+                queues={queues}
+                setIsOpen={setIsOpen}
+                handleSkipPatient={handleSkipPatient}
+              />
+
+              {isOpen && (
+                <FormCompleteQueue
+                  setIsOpen={setIsOpen}
+                  handleInputChange={handleInputChange}
+                  completeForm={completeForm}
+                  handleCompletedPatient={handleCompletedPatient}
+                  isLoading={isLoading}
+                  queues={queues}
+                />
+              )}
+            </>
+          )}
+
+          {/* Stats */}
+          <QueueStats queuePage={queuePage} />
         </div>
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={queuePage.paging.total_pages}
-          onPageChange={(page) => setCurrentPage(page)}
+        {/* Right Column - Patient Queue */}
+        <QueuePatientTable
+          queuePage={queuePage}
+          getStatusBadge={getStatusBadge}
+          handleCalledPatient={handleCalledPatient}
         />
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={queuePage.paging.total_pages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </div>
   );
 };
