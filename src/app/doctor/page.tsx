@@ -105,25 +105,25 @@ const DoctorDashboard = () => {
       <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
       {/* Main Content */}
       <main className=" px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === "dashboard" && (
+        {user && activeTab === "dashboard" && (
           <Dashboard
             queuePage={queuePage}
             setActiveTab={setActiveTab}
             getStatusBadge={getStatusBadge}
           />
         )}
-        {activeTab === "antrian" && (
+        {user && activeTab === "antrian" && (
           <Queue
             queuePage={queuePage}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             getStatusBadge={getStatusBadge}
             fetchQueuePage={fetchQueuePage}
-            user_id={user!.id}
+            user_id={user.id}
           />
         )}
-        {activeTab === "schedule" && (
-          <Schedule user_id={user!.id} getStatusBadge={getStatusBadge} />
+        {user && activeTab === "schedule" && (
+          <Schedule user_id={user.id} getStatusBadge={getStatusBadge} />
         )}
       </main>
     </div>
