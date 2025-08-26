@@ -61,17 +61,6 @@ const Headers = ({ activeTab, setActiveTab, user, logout }: Props) => {
               <span>Antrian</span>
             </button>
             <button
-              onClick={() => setActiveTab("patients")}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                activeTab === "patients"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              <span>Pasien</span>
-            </button>
-            <button
               onClick={() => setActiveTab("schedule")}
               className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                 activeTab === "schedule"
