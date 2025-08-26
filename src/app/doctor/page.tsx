@@ -9,6 +9,7 @@ import { useAuthStore } from "@/store/auth-store";
 import PageLoader from "@/components/fragment/PageLoader";
 import { useQueueStore } from "@/store/queue-store";
 import Queue from "./components/tabs/Queue";
+import Schedule from "./components/tabs/Schedule";
 
 const DoctorDashboard = () => {
   const [activeTab, setActiveTab] = useState(() => {
@@ -49,37 +50,6 @@ const DoctorDashboard = () => {
   }, [user?.name, currentPage]);
 
   if (loading) return <PageLoader />;
-
-  const patientRecords = [
-    {
-      id: 1,
-      name: "John Doe",
-      lastVisit: "2025-08-15",
-      diagnosis: "Hipertensi",
-      age: 45,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      lastVisit: "2025-08-14",
-      diagnosis: "Diabetes Type 2",
-      age: 52,
-    },
-    {
-      id: 3,
-      name: "Robert Johnson",
-      lastVisit: "2025-08-12",
-      diagnosis: "Gastritis",
-      age: 38,
-    },
-    {
-      id: 4,
-      name: "Sarah Wilson",
-      lastVisit: "2025-08-10",
-      diagnosis: "Migrain",
-      age: 29,
-    },
-  ];
 
   const getStatusBadge = (status: string) => {
     const statusStyles = {
@@ -122,112 +92,6 @@ const DoctorDashboard = () => {
       </span>
     );
   };
-
-  const renderPatients = () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-900">Data Pasien</h2>
-        <div className="relative">
-          <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Cari pasien..."
-            className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-        <div className="p-6">
-          <div className="space-y-4">
-            {patientRecords.map((patient) => (
-              <div
-                key={patient.id}
-                className="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-slate-900">
-                      {patient.name}
-                    </h4>
-                    <p className="text-sm text-slate-600">
-                      Umur: {patient.age} tahun
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      Kunjungan terakhir: {patient.lastVisit}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-slate-900">
-                      {patient.diagnosis}
-                    </p>
-                    <p className="text-xs text-slate-500">Diagnosis terakhir</p>
-                  </div>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                    Lihat Rekam Medis
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderSchedule = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-slate-900">Jadwal Praktik</h2>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Schedule Overview */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">
-            Jadwal Mingguan
-          </h3>
-          <div className="space-y-3">
-            {["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"].map(
-              (day, index) => (
-                <div
-                  key={day}
-                  className="flex justify-between items-center p-3 border border-slate-200 rounded-lg"
-                >
-                  <span className="font-medium text-slate-900">{day}</span>
-                  <span className="text-slate-600">08:00 - 16:00</span>
-                  <span className="px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs">
-                    Aktif
-                  </span>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">
-            Quick Actions
-          </h3>
-          <div className="space-y-3">
-            <button className="w-full p-4 border-2 border-dashed border-blue-300 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors">
-              + Blokir Waktu
-            </button>
-            <button className="w-full p-4 border-2 border-dashed border-emerald-300 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors">
-              + Set Waktu Libur
-            </button>
-            <button className="w-full p-4 border-2 border-dashed border-purple-300 rounded-lg text-purple-600 hover:bg-purple-50 transition-colors">
-              + Ubah Jadwal Harian
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   const renderProfile = () => (
     <div className="space-y-6">
@@ -364,8 +228,9 @@ const DoctorDashboard = () => {
             user_id={user!.id}
           />
         )}
-        {activeTab === "patients" && renderPatients()}
-        {activeTab === "schedule" && renderSchedule()}
+        {activeTab === "schedule" && (
+          <Schedule user_id={user!.id} getStatusBadge={getStatusBadge} />
+        )}
         {activeTab === "profile" && renderProfile()}
       </main>
     </div>
